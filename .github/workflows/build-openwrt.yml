@@ -43,7 +43,7 @@ on:
 
 
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_URL: https://github.com/openwrt/openwrt
   REPO_BRANCH: ${{ inputs.branchName }}
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: ${{ inputs.config_file }}
