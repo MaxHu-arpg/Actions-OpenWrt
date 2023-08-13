@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  doing:
     runs-on: ubuntu-22.04
 
     steps:
@@ -21,7 +21,11 @@ jobs:
         sudo snap install ngrok
 
     - name: ngrok open TCP p22
-      run: sudo ngrok tcp 22 --authtoken ${{ secrets.NGROK_TOKEN }}
+      run: |
+        echo "### Update user: $USER password ###"
+        echo -e "${{ secrets.USER_PASS }}\n${{ secrets.USER_PASS }}" | sudo passwd "$USER"
+        chmod og-rw ~
+        sudo ngrok tcp 22 --authtoken ${{ secrets.NGROK_TOKEN }}
 
     - name: Keep alive
       run: sleep 1h
