@@ -20,12 +20,20 @@ jobs:
         sudo -E apt-get -qq update
         sudo snap install ngrok
 
-    - name: ngrok open TCP p22
+    - name: Prepare for login
       run: |
         echo "### Update user: $USER password ###"
         echo -e "${{ secrets.USER_PASS }}\n${{ secrets.USER_PASS }}" | sudo passwd "$USER"
         chmod og-rw ~
-        sudo ngrok tcp 22 --authtoken ${{ secrets.NGROK_TOKEN }}
 
-    - name: Keep alive
-      run: sleep 1h
+    - name: ngrok open TCP p22 (1/3)
+      run: sudo ngrok tcp 22 --authtoken ${{ secrets.NGROK_TOKEN }}
+
+    - name: ngrok open TCP p22 (2/3)
+      run: sudo ngrok tcp 22 --authtoken ${{ secrets.NGROK_TOKEN }}
+
+    - name: ngrok open TCP p22 (3/3)
+      run: sudo ngrok tcp 22 --authtoken ${{ secrets.NGROK_TOKEN }}
+
+    - name: Disconnect
+      run: echo "Connection failed"
