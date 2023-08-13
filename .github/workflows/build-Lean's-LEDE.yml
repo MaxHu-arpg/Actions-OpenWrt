@@ -107,7 +107,7 @@ jobs:
       if: inputs.ssh == true
       with:
         detached: false
-        sudo: false
+        sudo: true
         limit-access-to-actor: true
 
     - name: Download package
