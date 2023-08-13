@@ -20,13 +20,8 @@ jobs:
         sudo -E apt-get -qq update
         sudo snap install ngrok
 
-    - name: Config ngrok
-      env:
-        NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
-      run: ngrok config add-authtoken $NGROK_TOKEN
-
-    - name: Open TCP p22
-      run: ngrok tcp 22
+    - name: ngrok open TCP p22
+      run: sudo ngrok tcp 22 --authtoken ${{ secrets.NGROK_TOKEN }}
 
     - name: Keep alive
       run: sleep 1h
