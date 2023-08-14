@@ -17,8 +17,12 @@ on:
       ssh:
         description: 'Use SSH to config'
         required: true
-        type: boolean
-        default: false
+        default: 'tmate'
+        type: choice
+        options:
+          - none
+          - tmate
+          - ngrok
       config_file:
         description: '.config file name (put the file to the root of repository )'
         required: true
@@ -105,13 +109,21 @@ jobs:
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
 
-    - name: SSH connection to Actions
+    - name: SSH connection to Actions (tmate)
       uses: mxschmitt/action-tmate@v3.16
-      if: inputs.ssh == true
+      if: inputs.ssh == 'tmate'
       with:
-        detached: false
-        sudo: true
         limit-access-to-actor: true
+
+    - name: SSH connection to Actions (ngrok)
+      if: inputs.ssh == 'ngrok'
+      run: |
+        echo "### Update user: $USER password ###"
+        echo -e "${{ secrets.USER_PASS }}\n${{ secrets.USER_PASS }}" | sudo passwd "$USER"
+        chmod og-rw ~
+        sudo snap install ngrok
+        echo "Go to https://dashboard.ngrok.com/"
+        sudo ngrok tcp 22 --authtoken ${{ secrets.NGROK_TOKEN }}
 
     - name: Download package
       id: package
