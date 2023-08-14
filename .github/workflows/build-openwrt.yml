@@ -109,10 +109,12 @@ jobs:
           $GITHUB_WORKSPACE/$DIY_P2_SH
 
       - name: SSH connection to Actions
-        uses: mxschmitt/action-tmate@v3.16
-        if: inputs.ssh == true
-        with:
-          limit-access-to-actor: true
+        run: |
+          echo "### Update user: $USER password ###"
+          echo -e "${{ secrets.USER_PASS }}\n${{ secrets.USER_PASS }}" | sudo passwd "$USER"
+          chmod og-rw ~
+          echo "Go to https://dashboard.ngrok.com/"
+          sudo ngrok tcp 22 --authtoken ${{ secrets.NGROK_TOKEN }}
 
       - name: Download package
         id: package
