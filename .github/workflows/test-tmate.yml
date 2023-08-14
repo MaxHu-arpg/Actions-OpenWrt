@@ -1,0 +1,21 @@
+
+name: test tmate
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@main
+
+      - name: SSH connection to Actions
+        uses: mxschmitt/action-tmate@v3.16
+        with:
+          limit-access-to-actor: true
+
+      - name: Waiting to stop
+        run: sleep 1h
