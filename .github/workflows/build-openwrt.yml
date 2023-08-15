@@ -14,6 +14,10 @@ on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
+      runs-on:
+        description: 'Use system (ubuntu-latest/windows-latest/macos-latest/self-hosted)'
+        required: true
+        default: 'ubuntu-22.04'
       ssh:
         description: 'Use SSH to config'
         required: true
@@ -65,7 +69,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ${{ inputs.runs-on }}
 
     steps:
       - uses: actions/checkout@main
@@ -142,7 +146,7 @@ jobs:
         run: |
           cd openwrt
           echo -e "$(nproc) thread compile"
-          make make -j1 || make -j1 V=s
+          make -j1 || make -j1 V=s
           echo "status=success" >> $GITHUB_OUTPUT
           grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
           [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
